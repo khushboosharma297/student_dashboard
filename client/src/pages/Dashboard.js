@@ -1,13 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { getDashboard } from "../api";
 import Charts from "../components/Charts";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Dashboard() {
+  const { logout } = useContext(AuthContext);
+
   const [data, setData] = useState({
     completedLessons: 0,
     timeSpent: 0,
     trend: [],
-    courses: []
+    courses: [],
+    isEmpty: false
   });
 
   useEffect(() => {
@@ -18,7 +22,7 @@ export default function Dashboard() {
           timeSpent: res?.timeSpent || 0,
           trend: res?.trend || [],
           courses: res?.courses || [],
-          isEmpty: res?.isEmpty
+          isEmpty: res?.isEmpty || false
         });
       })
       .catch(() => {
@@ -27,11 +31,24 @@ export default function Dashboard() {
   }, []);
 
   if (data.isEmpty)
-    return <p className="empty-state">No activity yet. Start learning!</p>;
+    return (
+      <div className="dashboard">
+        <button className="logout-btn" onClick={logout}>
+          Logout
+        </button>
+        <p className="empty-state">No activity yet. Start learning!</p>
+      </div>
+    );
 
   return (
     <div className="dashboard">
-      <h2 className="dashboard-title">Student Dashboard</h2>
+      {/* HEADER */}
+      <div className="dashboard-header">
+        <h2 className="dashboard-title">Student Dashboard</h2>
+        <button className="logout-btn" onClick={logout}>
+          Logout
+        </button>
+      </div>
 
       {/* STATS */}
       <div className="stats-grid">

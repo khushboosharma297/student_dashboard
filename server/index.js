@@ -15,5 +15,5 @@ app.use('/api/auth', authRoutes);
 app.use('/dashboard', dashboardRoutes);
 
 
-// connectDB();
+connectDB();
 app.listen(4000, () => console.log('Server running on port 4000'));
